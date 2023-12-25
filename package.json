@@ -1,0 +1,23 @@
+{
+  "name": "eurostat-client-ts",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "check": "biome check --apply .",
+    "test": "NODE_NO_WARNINGS=1 ava"
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--loader=tsx"
+    ]
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.4.1",
+    "ava": "^6.0.1",
+    "tsx": "^4.7.0"
+  }
+}
