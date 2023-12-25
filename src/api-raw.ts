@@ -48,10 +48,11 @@ export type CategoriesPerDimension = { [key: DimensionId]: CategoryId[] };
  * This is a subset of all information. Some fields have been omitted.
  */
 export type DatasetDataRaw = {
+	class: string;
 	label: string;
-	// Actual values are stored in a flat array with missing fields.
+	// Actual values are stored in a flattened array-like object with missing keys.
 	// Combine with dimensions to get a specific value.
-	value: number[];
+	value: { [key: number]: number };
 	id: string[];
 	// Extra information about the reading. See `DatasetExtensionRaw.status`.
 	status: string[];

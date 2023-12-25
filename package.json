@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "check": "biome check --apply .",
-    "test": "NODE_NO_WARNINGS=1 ava"
+    "test": "NODE_NO_WARNINGS=1 ava",
+    "test:unit": "$npm_execpath test src/",
+    "test:integration": "$npm_execpath test test/"
   },
   "ava": {
     "extensions": {
