@@ -44,7 +44,7 @@ export type CategoryId = string;
 export type CategoriesPerDimension = { [key: DimensionId]: CategoryId[] };
 
 /**
- * JSON object returned by the API.
+ * JSON object representing a dataset subset, including measurement values.
  * This is a subset of all information. Some fields have been omitted.
  */
 export type DatasetDataRaw = {
@@ -122,4 +122,76 @@ function buildQueryUrl(
 	}
 
 	return `https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/${datasetId}?${searchParams}`;
+}
+
+/**
+ * Structure guessed from an API request made by the eurostat dataset search tool:
+ * https://ec.europa.eu/eurostat/web/query-builder/tool
+ *
+ * Sample search request:
+ * https://ec.europa.eu/eurostat/search-api/generic/languages/en/_autocomplete?collection=dataset&text=hospital
+ *
+ * NOTE: the API allows searching for other collections. It's not yet supported by this library, though.
+ */
+type SearchResponseRow = {
+	code: DatasetId;
+	type: "dataset";
+	suggest: {
+		highlightLocation: "title" | "code";
+		// Preformatted HTML string with the hightlight section wrapped in `<b></b>`.
+		highlightPhrase: string;
+	};
+};
+
+/**
+ * Search for datasets matching a string.
+ *
+ * Sample request:
+ * https://ec.europa.eu/eurostat/search-api/generic/languages/en/_autocomplete?collection=dataset&text=hospital
+ */
+export async function searchDatasetsByText(
+	text: string,
+): Promise<SearchResponseRow[]> {
+	const url = `https://ec.europa.eu/eurostat/search-api/generic/languages/en/_autocomplete?collection=dataset&text=${text}`;
+	const resp = await fetch(url);
+	return await resp.json();
+}
+
+/**
+ * For whatever reason, some eurostat APIs return codes in ALL CAPS.
+ * This type is just a hint to the reader that a field uses this convention.
+ */
+type Uppercase<T extends string> = T;
+
+/**
+ * JSON object representing information about a dataset - available dimensions, categories, etc.
+ * Some fields have been omitted.
+ */
+export type DatasetMetadata = {
+	code: DatasetId;
+	title: string;
+	description: string;
+	dimensions: DatasetMetadataDimension[];
+};
+
+export type DatasetMetadataDimension = {
+	code: Uppercase<DimensionId>;
+	description: string;
+	positions: DatasetMetadataCategory[];
+};
+
+export type DatasetMetadataCategory = {
+	code: Uppercase<CategoryId>;
+	description: string;
+};
+
+/**
+ * Get dataset metadata - description, dimensions, etc.
+ */
+export async function fetchDatasetMetadata(
+	datasetId: DatasetId,
+): Promise<DatasetMetadata> {
+	const url = `https://ec.europa.eu/eurostat/search-api/datasets/${datasetId}/languages/en`;
+	const resp = await fetch(url);
+	return await resp.json();
 }
