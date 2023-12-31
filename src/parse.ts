@@ -1,9 +1,9 @@
 import {
 	CategoryId,
-	type DatasetDataDimensionRaw,
-	type DatasetDataRaw,
+	type DatasetData,
+	type DatasetDataDimension,
 	DimensionId,
-} from "./api-raw";
+} from "./api";
 
 /**
  * A parsed dataset.
@@ -30,7 +30,7 @@ type Category = {
  * Parse Eurostat API funny format, with values separated from dimensions,
  * into a verbose list of key-value pairs.
  */
-export function parseDatasetValues(data: DatasetDataRaw): Dataset {
+export function parseDatasetValues(data: DatasetData): Dataset {
 	const totalSize = data.size.reduce((x, y) => x * y, 1);
 	const categories: number[][] = indexToCategories(data.size);
 
@@ -74,7 +74,7 @@ export function parseDatasetValues(data: DatasetDataRaw): Dataset {
  * Where applicable, categories are converted to more specific types (e.g. Date).
  */
 function parseValuesDimension(
-	rawDimension: DatasetDataDimensionRaw,
+	rawDimension: DatasetDataDimension,
 	dimId: DimensionId,
 ): { label: string; categories: Category[] } {
 	const { label, category } = rawDimension;

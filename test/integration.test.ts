@@ -2,8 +2,8 @@ import test from "ava";
 
 import {
 	fetchDataset,
+	fetchDatasetAndParse,
 	fetchDatasetMetadata,
-	fetchDatasetRaw,
 	searchDatasetsByText,
 } from "../src/";
 
@@ -15,14 +15,14 @@ const categoriesPerDimension = {
 	itm_newa: ["40000"],
 };
 
-test("fetchDatasetRaw", async (t) => {
-	const result = await fetchDatasetRaw(datasetId, categoriesPerDimension);
+test("fetchDataset", async (t) => {
+	const result = await fetchDataset(datasetId, categoriesPerDimension);
 	t.is(result.class, "dataset");
 	t.deepEqual(Object.keys(result.value).length, 4);
 });
 
-test("fetchDataset", async (t) => {
-	const result = await fetchDataset(datasetId, categoriesPerDimension);
+test("fetchDatasetAndParse", async (t) => {
+	const result = await fetchDatasetAndParse(datasetId, categoriesPerDimension);
 	t.is(result.rows.length, 4);
 	t.deepEqual([...Object.keys(result.definitions)].sort(), [
 		"freq",

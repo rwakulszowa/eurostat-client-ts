@@ -47,28 +47,28 @@ export type CategoriesPerDimension = { [key: DimensionId]: CategoryId[] };
  * JSON object representing a dataset subset, including measurement values.
  * This is a subset of all information. Some fields have been omitted.
  */
-export type DatasetDataRaw = {
+export type DatasetData = {
 	class: string;
 	label: string;
 	// Actual values are stored in a flattened array-like object with missing keys.
 	// Combine with dimensions to get a specific value.
 	value: { [key: number]: number };
 	id: string[];
-	// Extra information about the reading. See `DatasetExtensionRaw.status`.
+	// Extra information about the reading. See `DatasetExtension.status`.
 	status: string[];
 	// Size of each dimension.
 	size: number[];
 	// Dimensions keyed by `DimensionId`.
-	dimension: { [key: DimensionId]: DatasetDataDimensionRaw };
+	dimension: { [key: DimensionId]: DatasetDataDimension };
 	// Extra metadata.
-	extension: DatasetDataExtensionRaw;
+	extension: DatasetDataExtension;
 };
 
 /**
  * Single dimension.
  * In short - a list of categories.
  */
-export type DatasetDataDimensionRaw = {
+export type DatasetDataDimension = {
 	label: string;
 	// Categories are provided as 2 separate objects with the
 	// exact same sets of keys. ¯\_(ツ)_/¯
@@ -81,7 +81,7 @@ export type DatasetDataDimensionRaw = {
 /**
  * Extra metadata.
  */
-export type DatasetDataExtensionRaw = {
+export type DatasetDataExtension = {
 	// Metadata - observation time bounds, update time, etc.
 	annotation: { type: string; title: string }[];
 	// Labels for `status` ids.
@@ -94,10 +94,10 @@ export type DatasetDataExtensionRaw = {
  * data is either impractical or impossible. Use this argument to specify the subset of data
  * you're interested in.
  */
-export async function fetchDatasetRaw(
+export async function fetchDataset(
 	datasetId: DatasetId,
 	categoriesPerDimension: CategoriesPerDimension,
-): Promise<DatasetDataRaw> {
+): Promise<DatasetData> {
 	const url = buildQueryUrl(datasetId, categoriesPerDimension);
 	const resp = await fetch(url);
 	return await resp.json();

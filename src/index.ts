@@ -1,15 +1,15 @@
-import { CategoriesPerDimension, DatasetId, fetchDatasetRaw } from "./api-raw";
+import { CategoriesPerDimension, DatasetId, fetchDataset } from "./api";
 import { Dataset, parseDatasetValues } from "./parse";
 export {
-	fetchDatasetRaw,
+	fetchDataset,
 	searchDatasetsByText,
 	fetchDatasetMetadata,
-} from "./api-raw";
+} from "./api";
 
-export async function fetchDataset(
+export async function fetchDatasetAndParse(
 	datasetId: DatasetId,
 	categoriesPerDimension: CategoriesPerDimension,
 ): Promise<Dataset> {
-	const raw = await fetchDatasetRaw(datasetId, categoriesPerDimension);
+	const raw = await fetchDataset(datasetId, categoriesPerDimension);
 	return parseDatasetValues(raw);
 }
