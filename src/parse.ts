@@ -3,7 +3,7 @@ import {
 	type DatasetData,
 	type DatasetDataDimension,
 	DimensionId,
-} from "./api";
+} from "./api.js";
 
 /**
  * A parsed dataset.

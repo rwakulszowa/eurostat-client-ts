@@ -1,10 +1,10 @@
-import { CategoriesPerDimension, DatasetId, fetchDataset } from "./api";
-import { Dataset, parseDatasetValues } from "./parse";
+import { CategoriesPerDimension, DatasetId, fetchDataset } from "./api.js";
+import { Dataset, parseDatasetValues } from "./parse.js";
 export {
 	fetchDataset,
 	searchDatasetsByText,
 	fetchDatasetMetadata,
-} from "./api";
+} from "./api.js";
 
 export async function fetchDatasetAndParse(
 	datasetId: DatasetId,
